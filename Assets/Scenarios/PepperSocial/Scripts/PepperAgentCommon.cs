@@ -39,6 +39,11 @@ public class PepperAgentCommmon : Agent {
 
     }
 
+    public override void CollectObservations()
+    {
+
+    }
+
     public override void AgentReset()
     {
         float allowedArea = ArenaDimensions * 0.4f;
@@ -46,7 +51,6 @@ public class PepperAgentCommmon : Agent {
 	      this.transform.position = new Vector3((Random.value * allowedArea) - (allowedArea / 2),
                                         0.16f,
                                         (Random.value * allowedArea) - (allowedArea / 2));
-
         this.rBody.angularVelocity = Vector3.zero;
         this.rBody.velocity = Vector3.zero;
 
@@ -54,15 +58,9 @@ public class PepperAgentCommmon : Agent {
         Target.position = new Vector3((Random.value * allowedArea) - (allowedArea / 2),
                                         0.1f,
                                         (Random.value * allowedArea) - (allowedArea / 2));
-
         MoveCamera();
-
 	      this.maxStepsPerEpoch = 1000;
-    }
-
-    public override void CollectObservations()
-    {
-
+        this.previousDistance = 0f;
     }
 
     protected void CheckReward()
@@ -81,28 +79,21 @@ public class PepperAgentCommmon : Agent {
       // Getting closer
       if (distanceToTarget < previousDistance)
       {
-          //<Alex-reward>
+          // <Alex-reward>
           // AddReward(0.1f);
-          //</Alex-reward>
+          // </Alex-reward>
 
-
-          // distanceToTarget - previousDistance
-          //<Martin-reward>
-          float delta_d = 0.1f*(distanceToTarget - previousDistance);
+          // //<Martin-reward>
+          float delta_d = 0.1f*(previousDistance - distanceToTarget);
           AddReward(delta_d);
-          //</Martin-reward>
+          // //</Martin-reward>
       }
-
 
       // Time penalty
       AddReward(-0.05f);
 
       this.previousDistance = distanceToTarget;
 
-      // Actions, size = 2
-      // punish turning
-      //AddReward(vectorAction[1]);
-      // HandleMovement(vectorAction);
     }
 
     protected virtual void Move(float[] action, string text)
