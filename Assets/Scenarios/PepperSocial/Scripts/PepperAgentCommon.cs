@@ -63,38 +63,52 @@ public class PepperAgentCommmon : Agent {
         this.previousDistance = 0f;
     }
 
+    protected void RewardLinear(float d, float prev_d)
+    {
+            // Getting closer
+            if (d < prev_d)
+            {
+                float delta_d = 0.1f*(prev_d - d);
+                AddReward(delta_d);
+            }
+            else
+            {
+              // Time penalty
+              AddReward(-0.025f);
+            }
+            // Time penalty
+            AddReward(-0.025f);
+    }
+
+    protected void RewardConstant(float d, float prev_d)
+    {
+      // Getting closer
+      if (d < prev_d)
+        AddReward(0.1f);
+      // Time penalty
+      AddReward(-0.05f);
+    }
+
+    protected void RewardDirect(float d, float prev_d)
+    {
+      float delta_d = 0.1f*(prev_d - d);
+      AddReward(delta_d - 0.05f);
+    }
+
     protected void CheckReward()
     {
       // Rewards
       float distanceToTarget = Vector3.Distance(this.transform.position,
                                                 Target.position);
-
-      // Reached target
-      if (distanceToTarget < 0.5f)
-      {
-          Done();
-          AddReward(1.0f);
-      }
-
-      // Getting closer
-      if (distanceToTarget < previousDistance)
-      {
-          // <Alex-reward>
-          // AddReward(0.1f);
-          // </Alex-reward>
-
-          // //<Martin-reward>
-          float delta_d = 0.1f*(previousDistance - distanceToTarget);
-          AddReward(delta_d);
-          // //</Martin-reward>
-      }
-
-      // Time penalty
-      AddReward(-0.05f);
+      // RewardLinear(distanceToTarget,previousDistance);
+      // RewardDirect(distanceToTarget,previousDistance);
+      RewardConstant(distanceToTarget,previousDistance);
 
       this.previousDistance = distanceToTarget;
 
     }
+
+
 
     protected virtual void Move(float[] action, string text)
     {
@@ -110,7 +124,7 @@ public class PepperAgentCommmon : Agent {
         Vector3 rotated_v = Quaternion.AngleAxis(3f*(controlSignal.x), Vector3.up) * v;
         rBody.velocity = rotated_v;
 
-        rBody.AddForce(20.0f * controlSignal.z*rBody.transform.forward);
+        rBody.AddForce(10.0f * controlSignal.z*rBody.transform.forward);
         // rBody.AddForce(speed * rBody.transform.forward);
 
         this.steps = this.steps + 1;
@@ -123,7 +137,8 @@ public class PepperAgentCommmon : Agent {
         Move(vectorAction,textAction);
         CheckReward();
 
-        if (this.steps == this.maxStepsPerEpoch)
+        if (this.steps == this.maxStepsPerEpoch || Vector3.Distance(this.transform.position,
+                                                  Target.position) < 0.5f)
         {
             this.steps = 0;
             Done();
