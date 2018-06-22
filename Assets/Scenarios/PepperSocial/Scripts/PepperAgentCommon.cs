@@ -100,9 +100,9 @@ public class PepperAgentCommmon : Agent {
       // Rewards
       float distanceToTarget = Vector3.Distance(this.transform.position,
                                                 Target.position);
-      // RewardLinear(distanceToTarget,previousDistance);
+      RewardLinear(distanceToTarget,previousDistance);
       // RewardDirect(distanceToTarget,previousDistance);
-      RewardConstant(distanceToTarget,previousDistance);
+      // RewardConstant(distanceToTarget,previousDistance);
 
       this.previousDistance = distanceToTarget;
 
