@@ -113,11 +113,11 @@ public class PepperAgentCommmon : Agent {
         AddReward(1.0f);
         return;
       }
-      
+
       // Nudge-Rewards:
-      // RewardLinear(distanceToTarget,previousDistance);
+      RewardLinear(distanceToTarget,previousDistance);
       // RewardDirect(distanceToTarget,previousDistance);
-      RewardConstant(distanceToTarget,previousDistance);
+      // RewardConstant(distanceToTarget,previousDistance);
 
       this.previousDistance = distanceToTarget;
 
