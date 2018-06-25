@@ -69,36 +69,43 @@ public class PepperAgentCommmon : Agent {
         this.previousDistance = 0f;
     }
 
-    protected void RewardLinear(float d, float prev_d)
+    protected float RewardLinear(float d, float prev_d)
     {
+      float r = 0.0f;
+
             // Getting closer
             if (d < prev_d)
             {
-                float delta_d = 0.1f*(prev_d - d);
-                AddReward(delta_d);
+                float delta_d = 10.0f*(prev_d - d);
+                r += delta_d;
             }
             else
             {
               // Time penalty
-              AddReward(-0.025f);
+              r += (-0.025f);
             }
             // Time penalty
-            AddReward(-0.025f);
+            r += (-0.025f);
+      return r;
     }
 
-    protected void RewardConstant(float d, float prev_d)
+    protected float RewardConstant(float d, float prev_d)
     {
+      float r = 0.0f;
       // Getting closer
       if (d < prev_d)
-        AddReward(0.1f);
+        r += (0.1f);
       // Time penalty
-      AddReward(-0.05f);
+      r += (-0.05f);
+      return r;
     }
 
-    protected void RewardDirect(float d, float prev_d)
+    protected float RewardDirect(float d, float prev_d)
     {
-      float delta_d = 0.1f*(prev_d - d);
-      AddReward(delta_d - 0.05f);
+      float r = 0.0f;
+      float delta_d = 10f*(prev_d - d);
+      r += (delta_d - 0.05f);
+      return r;
     }
 
     protected void CheckReward() //This is just the bump-component of the reward
@@ -111,14 +118,16 @@ public class PepperAgentCommmon : Agent {
       if (distanceToTarget < this.targetDistance)
       {
         AddReward(1.0f);
+        // Debug.Log($"Win-reward r:{1.0f}");
         return;
       }
 
       // Nudge-Rewards:
-      RewardLinear(distanceToTarget,previousDistance);
-      // RewardDirect(distanceToTarget,previousDistance);
-      // RewardConstant(distanceToTarget,previousDistance);
-
+      float nudge;
+      // nudge = RewardLinear(distanceToTarget,previousDistance);
+      // nudge = RewardDirect(distanceToTarget,previousDistance);
+      nudge = RewardConstant(distanceToTarget,previousDistance);
+      // Debug.Log($"Nudge-reward r:{nudge}");
       this.previousDistance = distanceToTarget;
 
     }

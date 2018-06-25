@@ -7,7 +7,7 @@ public class PepperAgentFat : PepperAgentCommmon{
   public PepperAgentFat()
   {
     //Fat agent is so fat it needs to redefine this variable for the win condition to work!
-    this.targetDistance = 1.0f;
+    this.targetDistance = 2.0f;
   }
 
   //Fat agent uses the same motion model as the simplified one...
@@ -23,7 +23,7 @@ public class PepperAgentFat : PepperAgentCommmon{
     Vector3 tmp = x * controlSignal;
     controlSignal = controlSignal / tmp.magnitude;
 
-    Debug.Log($"Action X:{controlSignal.x}, theta:{controlSignal.y}");
+    // Debug.Log($"Action X:{controlSignal.x}, theta:{controlSignal.z}");
 
     rBody.AddForce(10f * controlSignal);
     rBody.transform.forward = Target.transform.position - rBody.transform.position;

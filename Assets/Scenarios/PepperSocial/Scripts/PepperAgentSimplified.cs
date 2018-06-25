@@ -17,9 +17,9 @@ public class PepperAgentSimplified : PepperAgentCommmon {
     Vector3 tmp = x * controlSignal;
     controlSignal = controlSignal / tmp.magnitude;
 
-    Debug.Log($"Action X:{controlSignal.x}, theta:{controlSignal.y}");
+    Debug.Log($"Action X:{controlSignal.x}, theta:{controlSignal.z}");
 
-    rBody.AddForce(10f * controlSignal);
+    rBody.AddForce(10.0f * controlSignal);
     rBody.transform.forward = Target.transform.position - rBody.transform.position;
     this.steps = this.steps + 1;
     MoveCamera();
