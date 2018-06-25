@@ -23,6 +23,12 @@ public class PepperAgentCommmon : Agent {
 
     protected int maxStepsPerEpoch;
     protected int steps;
+    protected float targetDistance = 0.5f;
+
+    public PepperAgentCommmon()
+    {
+      this.targetDistance = 0.5f;
+    }
 
     virtual protected void MoveCamera()
     {
@@ -95,11 +101,20 @@ public class PepperAgentCommmon : Agent {
       AddReward(delta_d - 0.05f);
     }
 
-    protected void CheckReward()
+    protected void CheckReward() //This is just the bump-component of the reward
     {
-      // Rewards
+
       float distanceToTarget = Vector3.Distance(this.transform.position,
                                                 Target.position);
+
+      // Win-Reward:
+      if (distanceToTarget < this.targetDistance)
+      {
+        AddReward(1.0f);
+        return;
+      }
+      
+      // Nudge-Rewards:
       // RewardLinear(distanceToTarget,previousDistance);
       // RewardDirect(distanceToTarget,previousDistance);
       RewardConstant(distanceToTarget,previousDistance);
@@ -107,7 +122,6 @@ public class PepperAgentCommmon : Agent {
       this.previousDistance = distanceToTarget;
 
     }
-
 
 
     protected virtual void Move(float[] action, string text)
@@ -138,7 +152,7 @@ public class PepperAgentCommmon : Agent {
         CheckReward();
 
         if (this.steps == this.maxStepsPerEpoch || Vector3.Distance(this.transform.position,
-                                                  Target.position) < 0.5f)
+                                                  Target.position) < this.targetDistance)
         {
             this.steps = 0;
             Done();

@@ -2,10 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PepperAgent : PepperAgentCommmon {
+public class PepperAgentSimplified : PepperAgentCommmon {
 
   // Like a normal PepperAgent, but it has a simplified motion-model!
-
   protected override void Move(float[] action, string t)
   {
     // Actions, size = 2

@@ -4,19 +4,13 @@ using UnityEngine;
 
 public class PepperAgentFat : PepperAgentCommmon{
 
-  public override void AgentAction(float[] vectorAction, string textAction)
+  public PepperAgentFat()
   {
-
-      Move(vectorAction,textAction);
-      CheckReward();
-
-      if (this.steps == this.maxStepsPerEpoch || Vector3.Distance(this.transform.position,
-                                                Target.position) < 1.0f)
-      {
-          this.steps = 0;
-          Done();
-      }
+    //Fat agent is so fat it needs to redefine this variable for the win condition to work!
+    this.targetDistance = 1.0f;
   }
+
+  //Fat agent uses the same motion model as the simplified one...
   protected override void Move(float[] action, string t)
   {
     // Actions, size = 2
