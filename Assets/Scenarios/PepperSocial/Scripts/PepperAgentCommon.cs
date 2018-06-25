@@ -123,11 +123,12 @@ public class PepperAgentCommmon : Agent {
       }
 
       // Nudge-Rewards:
-      float nudge;
+      float nudge = 0.0f;
       // nudge = RewardLinear(distanceToTarget,previousDistance);
       // nudge = RewardDirect(distanceToTarget,previousDistance);
       nudge = RewardConstant(distanceToTarget,previousDistance);
       // Debug.Log($"Nudge-reward r:{nudge}");
+      AddReward(nudge);
       this.previousDistance = distanceToTarget;
 
     }
